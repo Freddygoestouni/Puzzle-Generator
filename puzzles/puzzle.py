@@ -87,7 +87,7 @@ class I_Puzzle:
 
         raise NotImplementedError("Subclass has not implemented this method!")
 
-    def generator(self, difficulty : Difficulty) -> None:
+    def generate(self, difficulty : Difficulty) -> None:
         '''
         Method to generate a puzzle.
 

@@ -1,6 +1,6 @@
 from puzzles.sudoku.puzzle import Sudoku_Puzzle
 from puzzles.sudoku.seed_manager import *
-
+from puzzles.puzzle import Difficulty
 import argparse
 
 
@@ -11,9 +11,14 @@ args = parser.parse_args()
 
 
 if args.puzzle[0] == "Sudoku":
-    # puzzle = Sudoku_Puzzle()
+    puzzle = Sudoku_Puzzle()
+
+    puzzle.generate(Difficulty.EASY)
     #
     # puzzle.puzzle_to_terminal()
     # puzzle.solution_to_terminal()
 
-    generate_seeds()
+    #generate_seeds()
+
+if args.puzzle[0] == "Generate":
+    mutate_seed("fihkmjglelmgehfjikkejlgifmhigmjlhekfjflikehgmehkmfgljihligekmfjgkfhjmielmjefilkhg")

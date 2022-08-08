@@ -480,16 +480,3 @@ class Sudoku:
 
         # Print the sudoku
         print(string)
-
-
-if __name__ == "__main__":
-
-
-
-    sudoku = Sudoku()
-
-    sudoku.fill()
-    sudoku.print_terminal()
-
-    print("VALID =", sudoku.valid())
-    print(sudoku.get_seed())

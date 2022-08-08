@@ -286,12 +286,16 @@ class Sudoku:
         # If all cells have passed the check, return valid
         return True
 
-    def fill(self, clear=False) -> None:
+    def fill(self, clear=False, find_all=False) -> None:
         '''
         Method to fill a sudoku with valid values, to create a valid filled in sudoku grid.
 
         Parameters:
             - clear (optional) - boolean for whether to clear the sudoku before filling it (default is False)
+            - find_all (optional) - boolean for whether to find more than one sudoku value (default is False)
+
+        Returns:
+            - if find_all is True, it returns a list of valid seeds found
         '''
 
         # If the sudoku should be cleared else, check if the sudoku is valid
@@ -316,16 +320,28 @@ class Sudoku:
         # Randomly shuffle the cell locations
         random.shuffle(empty)
 
+        # Initialise the list of all seeds if find_all is True
+        if find_all:
+            self.__seeds = list()
+
         # Call the recursive function to fill the sudoku grid
-        if not self.__fill_backtrack(empty):
+        if not self.__fill_backtrack(empty, find_all):
+            # If it is looking for all seeds it returns them
+            if find_all:
+                # Get the list of all seeds, delete it from the object and return it
+                seeds = self.__seeds
+                del self.__seeds
+                return seeds
+
             raise Exception("Could not find a valid sudoku grid")
 
-    def __fill_backtrack(self, locations) -> bool:
+    def __fill_backtrack(self, locations:list, find_all=False) -> bool:
         '''
         Recursive method to fill a sudoku with valid values, to create a valid filled in sudoku grid.
 
         Parameters:
             - locations - list of remaining locations in the sudoku which are empty (yet to be filled)
+            - find_all (optional) - whether to find just one sudoku or many
 
         Returns:
             - bool - whether a valid sudoku has been created
@@ -333,6 +349,13 @@ class Sudoku:
 
         # Base Case - if the list of locations yet to be filled is empty (i.e. sudoku is full)
         if len(locations) == 0:
+            self.print_terminal()
+
+            # If all sudoku grids are to be found, add the current seed to the list, and carry on searching
+            if find_all:
+                self.__seeds += [self.get_seed()]
+                return True
+
             return True
 
         # Get the next location to be filled off the list

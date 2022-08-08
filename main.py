@@ -1,4 +1,5 @@
 from puzzles.sudoku.puzzle import Sudoku_Puzzle
+from puzzles.sudoku.seed_manager import *
 
 import argparse
 
@@ -10,7 +11,9 @@ args = parser.parse_args()
 
 
 if args.puzzle[0] == "Sudoku":
-    puzzle = Sudoku_Puzzle()
+    # puzzle = Sudoku_Puzzle()
+    #
+    # puzzle.puzzle_to_terminal()
+    # puzzle.solution_to_terminal()
 
-    puzzle.puzzle_to_terminal()
-    puzzle.solution_to_terminal()
+    generate_seeds()

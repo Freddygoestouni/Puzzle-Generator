@@ -31,6 +31,27 @@ class Page_Size(Enum):
     A4 = 2
     A5 = 3
 
+    def __str__(self):
+        '''
+        Method to return the string representation of the page size for use in pdf generation.
+        '''
+
+        return str(self.name)
+
+    def width(self):
+        '''
+        Method to return the width of the page size in mm.
+        '''
+
+        return 297 if self.value == 1 else 210 if self.value == 2 else 148
+
+    def height(self):
+        '''
+        Method to return the width of the page size in mm.
+        '''
+
+        return 420 if self.value == 1 else 297 if self.value == 2 else 210
+
 class I_Puzzle:
     '''
     Interface Class for a puzzle detailing the specifications for methods each puzzle type must have.
@@ -87,7 +108,7 @@ class I_Puzzle:
 
         raise NotImplementedError("Subclass has not implemented this method!")
 
-    def generator(self, difficulty : Difficulty) -> None:
+    def generate(self, difficulty : Difficulty) -> None:
         '''
         Method to generate a puzzle.
 

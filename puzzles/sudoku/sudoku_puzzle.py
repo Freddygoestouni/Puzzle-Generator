@@ -1,6 +1,7 @@
 from ..puzzle import I_Puzzle, Difficulty, Page_Size
 from .sudoku import Sudoku
 from .seed_manager import *
+from .sudoku_pdf import Sudoku_PDF
 
 class Sudoku_Puzzle(I_Puzzle):
 
@@ -47,6 +48,8 @@ class Sudoku_Puzzle(I_Puzzle):
             - difficulty - the level of difficulty the generated puzzle should have (Difficulty enum)
         '''
 
+        self.__difficulty = difficulty
+
         seed = get_seed()
 
         self.__puzzle.from_seed(seed)
@@ -78,3 +81,8 @@ class Sudoku_Puzzle(I_Puzzle):
             # If there is only one option for cell value with can be directly inferred, remove the cell value
             if len(self.__puzzle.cell_options(column, row)) == 1:
                 self.__puzzle.set_value(column, row, Cell_Value.EMPTY)
+
+    def to_pdf(self, include_solution : bool, page_size : Page_Size, filepath : str):
+        pdf = Sudoku_PDF(page_size)
+        pdf.insert_puzzle(self.__difficulty, self.__puzzle, self.__solution)
+        pdf.output("test.pdf", "F")

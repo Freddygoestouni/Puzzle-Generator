@@ -20,9 +20,9 @@ page_size = sizes[args.size[0]]
 if args.puzzle[0] == "Sudoku":
     puzzle = Sudoku_Puzzle()
 
-    puzzle.generate(Difficulty.EASY)
+    puzzle.generate(Difficulty.MEDIUM)
 
-    puzzle.to_pdf(True, page_size, "filepath")
+    puzzle.to_pdf(False, page_size, "test.pdf")
     #
     # puzzle.puzzle_to_terminal()
     # puzzle.solution_to_terminal()

@@ -21,7 +21,7 @@ class Sudoku:
         '''
 
         # Create an empty sudoku grid
-        self.__grid = [ [Cell_Value.EMPTY]*9 for i in range(9)]
+        self.__grid = [[Cell_Value.EMPTY]*9 for i in range(9)]
 
         # Fill the sudoku based on a seed if one is given
         if seed is not None:

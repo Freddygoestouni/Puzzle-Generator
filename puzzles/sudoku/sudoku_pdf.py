@@ -24,12 +24,13 @@ class Sudoku_PDF(PDF):
         # Set the title of the class to Sudoku
         self.set_title("Sudoku")
 
-    def insert_puzzle(self, difficulty : Difficulty, puzzle : Sudoku, solution=None) -> None:
+    def insert_puzzle(self, difficulty : Difficulty, seed : str, puzzle : Sudoku, solution=None) -> None:
         '''
         Method to insert a sudoku puzzle into the document.
 
         Parameters:
             - difficulty - Difficulty of the puzzle to be added to the document
+            - seed - Seed of the sudoku puzzle to be added to the document
             - puzzle - Sudoku puzzle to be added to the document
             - solution (optional) - Solution to the sudoku puzzle, if one is given
         '''
@@ -38,7 +39,7 @@ class Sudoku_PDF(PDF):
         self.add_page()
 
         # Add the puzzle title and difficulty + seed information to the PDF document
-        self.puzzle_title("Sudoku Puzzle", {"Difficulty" : str(difficulty), "Seed" : solution.get_seed()})
+        self.puzzle_title("Sudoku Puzzle", {"Difficulty" : str(difficulty), "Seed" : seed})
 
         # Add the puzzle to the PDF document
         self.__add_puzzle(puzzle)

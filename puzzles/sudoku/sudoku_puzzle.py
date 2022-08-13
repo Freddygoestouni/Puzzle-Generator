@@ -1,7 +1,10 @@
+import math
+
 from ..puzzle import I_Puzzle, Difficulty, Page_Size
 from .sudoku import Sudoku
 from .seed_manager import *
 from .sudoku_pdf import Sudoku_PDF
+from .create_difficulty import *
 
 class Sudoku_Puzzle(I_Puzzle):
 
@@ -40,49 +43,59 @@ class Sudoku_Puzzle(I_Puzzle):
 
         self.__solution.print_terminal(size=size)
 
-    def generate(self, difficulty : Difficulty) -> None:
+    def generate(self, difficulty : Difficulty, seed=None) -> None:
         '''
         Method to generate a sudoku puzzle.
 
         Parameters:
             - difficulty - the level of difficulty the generated puzzle should have (Difficulty enum)
+            - seed (optional) - the seed to use for the puzzle, if not included it uses a random one
         '''
 
+        # Set the difficulty of the puzzle as a class variable
         self.__difficulty = difficulty
 
-        seed = get_seed()
+        # Check that the seed given is valid
+        if seed is not None and (type(seed) is not str or not Sudoku(seed).valid()):
+            raise Exception("Invalid seed parameter. Must be a valid seed.")
 
+        # If the seed is not given, find a random one
+        if seed is None:
+            seed = get_seed()
+
+        # Create sudoku grids using the seed for the puzzle and solution
         self.__puzzle.from_seed(seed)
         self.__solution.from_seed(seed)
 
-        self.__solution.print_terminal()
-
+        # Remove squares depending on the difficulty requested
         if difficulty == Difficulty.EASY:
-            self.__generate_easy()
-
-        self.__puzzle.print_terminal(size="big")
-
-
-    def __generate_easy(self) -> None:
-        '''
-        Method to remove cells in the puzzle to create an easy sudoku.
-        '''
-
-        # Get a shuffled list of all indices of cells in the sudoku
-        indices = list(range(81))
-        random.shuffle(indices)
-
-        # Loop through each of the indices
-        for index in indices:
-            # Get the coordinates of the index
-            row = index % 9 + 1
-            column = int(index / 9) + 1
-
-            # If there is only one option for cell value with can be directly inferred, remove the cell value
-            if len(self.__puzzle.cell_options(column, row)) == 1:
-                self.__puzzle.set_value(column, row, Cell_Value.EMPTY)
+            self.__puzzle = generate_easy(self.__puzzle)
+        elif difficulty == Difficulty.MEDIUM:
+            self.__puzzle = generate_medium(self.__puzzle)
+        elif difficulty == Difficulty.HARD:
+            self.__puzzle = generate_hard(self.__puzzle)
+        elif difficulty == Difficulty.EXTREME:
+            self.__puzzle = generate_extreme(self.__puzzle)
 
     def to_pdf(self, include_solution : bool, page_size : Page_Size, filepath : str):
+        '''
+        Method to convert the sudoku puzzle with proper formatting to a pdf document which can
+        then be used by a user.
+
+        Parameters:
+            - include_solution - boolean indicating whether to include the solution on the page
+            - page_size - the size of the page the pdf should be (Page_Size enum)
+            - filepath - string filepath denoting where to save the pdf document to
+        '''
+
+        # Set up a PDF document with the specified page size
         pdf = Sudoku_PDF(page_size)
-        pdf.insert_puzzle(self.__difficulty, self.__puzzle, self.__solution)
-        pdf.output("test.pdf", "F")
+
+        # Insert the sudoku puzzle to the PDF document
+        pdf.insert_puzzle(self.__difficulty,
+                                     self.__solution.get_seed(),
+                                     self.__puzzle,
+                                     self.__solution if include_solution else None)
+
+        # Output the PDF document to the specified filepath
+        pdf.output(filepath, "F")

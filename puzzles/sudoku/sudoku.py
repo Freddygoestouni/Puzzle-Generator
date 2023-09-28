@@ -286,6 +286,15 @@ class Sudoku:
         # If all cells have passed the check, return valid
         return True
 
+    def number_of_clues(self) -> int:
+        '''
+        Method to return the number of clues (numbers) present in the sudoku.
+
+        Returns:
+            - int - the number of clues in the sudoku
+        '''
+        return 9**2 - self.get_seed().count(Cell_Value.EMPTY.seed())
+
     def fill(self, clear=False, find_all=False) -> None:
         '''
         Method to fill a sudoku with valid values, to create a valid filled in sudoku grid.

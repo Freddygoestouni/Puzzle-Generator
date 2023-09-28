@@ -3,25 +3,6 @@ from puzzles.sudoku.seed_manager import *
 from puzzles.puzzle import Difficulty, Page_Size
 import argparse
 
-parser = argparse.ArgumentParser(description="Puzzle Generator")
-parser.add_argument("puzzle", nargs=1, help="Name of the puzzle. Options are: Sudoku, Wordsearch, ...")
-args = parser.parse_args()
-
-if args.puzzle[0] == "Sudoku":
-
-    difficulty = get_difficulty()
-
-    page_size = get_page_size()
-
-    puzzle = Sudoku_Puzzle()
-
-    puzzle.generate(difficulty)
-
-    puzzle.to_pdf(False, page_size, "test.pdf")
-
-if args.puzzle[0] == "Generate":
-    mutate_seed("fihkmjglelmgehfjikkejlgifmhigmjlhekfjflikehgmehkmfgljihligekmfjgkfhjmielmjefilkhg")
-
 def get_page_size() -> Page_Size:
     '''
     Method to get the page size from the user.
@@ -68,3 +49,23 @@ def get_difficulty() -> Difficulty:
 
     # Return the difficulty given by the user input
     return difficulties[user_input]
+
+if __name__  == "__main__":
+    parser = argparse.ArgumentParser(description="Puzzle Generator")
+    parser.add_argument("puzzle", nargs=1, help="Name of the puzzle. Options are: Sudoku, Wordsearch, ...")
+    args = parser.parse_args()
+
+    if args.puzzle[0] == "Sudoku":
+
+        difficulty = get_difficulty()
+
+        page_size = get_page_size()
+
+        puzzle = Sudoku_Puzzle()
+
+        puzzle.generate(difficulty)
+
+        puzzle.to_pdf(False, page_size, "test.pdf")
+
+    if args.puzzle[0] == "Generate":
+        mutate_seed("fihkmjglelmgehfjikkejlgifmhigmjlhekfjflikehgmehkmfgljihligekmfjgkfhjmielmjefilkhg")
